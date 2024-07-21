@@ -180,31 +180,36 @@ def main():
 
         st.write("Prediction:")
         output = prediction[0]
- 
-        diagnosis_labels = {
-            "Depression": output[0],
-            "Schizophrenia": output[1],
-            "Acute_and_transient_psychotic_disorder": output[2],
-            "Delusional_Disorder": output[3],
-            "BiPolar1": output[4],
-            "BiPolar2": output[5],
-            "Anxiety": output[6],
-            "Generalized_Anxiety": output[7],
-            "Panic_Disorder": output[8],
-            "Specific_Phobia": output[9],
-            "Social_Anxiety": output[10],
-            "OCD": output[11],
-            "PTSD": output[12],
-            "Gambling": output[13],
-            "substance_abuse": output[14]
-        }
+        diagnosis_labels = defaultdict(str)
+        i = 0
+        for labels in query:
+            diagnosis_labels[labels] = "Present" if output[i] else "Not Present" 
+            i+=1
+
+        # diagnosis_labels = {
+        #     "Depression": output[0],
+        #     "Schizophrenia": output[1],
+        #     "Acute_and_transient_psychotic_disorder": output[2],
+        #     "Delusional_Disorder": output[3],
+        #     "BiPolar1": output[4],
+        #     "BiPolar2": output[5],
+        #     "Anxiety": output[6],
+        #     "Generalized_Anxiety": output[7],
+        #     "Panic_Disorder": output[8],
+        #     "Specific_Phobia": output[9],
+        #     "Social_Anxiety": output[10],
+        #     "OCD": output[11],
+        #     "PTSD": output[12],
+        #     "Gambling": output[13],
+        #     "substance_abuse": output[14]
+        # }
         decimals = probabilities
         
         labels = []
         values = []
         i = 0
         for diagnose in diagnosis_labels:
-            if diagnosis_labels[diagnose] == 1:
+            if diagnosis_labels[diagnose] == "Present":
                 labels.append(diagnose)
                 values.append(round(decimals[i][0][1]*100,2))
             i += 1
@@ -215,8 +220,9 @@ def main():
             st.header('NO MHD PRESENT ❌')
         else:
             st.header('MHDs DETECTED ✅')
+            st.write(diagnosis_labels)
             st.write(prob_labels)  
-                  
+            
             st.title("Pie Chart Example")
 
             # Create a pie chart
