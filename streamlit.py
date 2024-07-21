@@ -1,4 +1,6 @@
 import streamlit as st
+from collections import defaultdict
+from decimal import *
 import joblib
 import numpy as np
 import matplotlib.pyplot as plt
@@ -147,7 +149,7 @@ def main():
             "108. Have you experienced withdrawal symptoms or a significant change in your daily functioning due to your drug use?"
         ]
     }
-
+    getcontext().prec = 2
     responses = []
     for heading in query:
         questions = query[heading]
@@ -178,7 +180,7 @@ def main():
 
         st.write("Prediction:")
         output = prediction[0]
-        st.write(output)
+ 
         diagnosis_labels = {
             "Depression": output[0],
             "Schizophrenia": output[1],
@@ -197,41 +199,46 @@ def main():
             "substance_abuse": output[14]
         }
         decimals = probabilities
-
+        
         labels = []
         values = []
         i = 0
         for diagnose in diagnosis_labels:
             if diagnosis_labels[diagnose] == 1:
                 labels.append(diagnose)
-                values.append(decimals[i][0][1])
+                values.append(round(decimals[i][0][1]*100,2))
             i += 1
-        st.write(labels)
-        st.write(values)
-        
-        st.title("Pie Chart Example")
+        prob_labels = defaultdict(float)
+        for i in range(len(labels)):
+            prob_labels[labels[i]] = values[i]
+        if len(values) == 0:
+            st.header('NO MHD PRESENT')
+        else:
+            st.write(prob_labels)        
+            st.title("Pie Chart Example")
 
-        # Create a pie chart
-        fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(
-            values,
-            labels=labels,
-            autopct='%1.1f%%',  # Format of the percentage
-            startangle=140,
-            colors=plt.get_cmap('tab10').colors
-        )
+            # Create a pie chart
 
-        # Add a legend
-        ax.legend(wedges, labels,
-                  title="Categories",
-                  loc="center left",
-                  bbox_to_anchor=(1, 0, 0.5, 1))
+            fig, ax = plt.subplots()
+            wedges, texts, autotexts = ax.pie(
+                values,
+                labels=labels,
+                autopct='%1.1f%%',  # Format of the percentage
+                startangle=140,
+                colors=plt.get_cmap('tab10').colors
+            )
 
-        # Add a title
-        plt.title('Distribution of Categories')
+            # Add a legend
+            ax.legend(wedges, labels,
+                    title="Categories",
+                    loc="center left",
+                    bbox_to_anchor=(1, 0, 0.5, 1))
 
-        # Display the pie chart in Streamlit
-        st.pyplot(fig)
+            # Add a title
+            plt.title('Distribution of Categories')
+
+            # Display the pie chart in Streamlit
+            st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
