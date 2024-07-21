@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 model = joblib.load('GBMClassifier_model.pkl')
 
 def main():
-    st.title("Mental Health Diagnostic Questionnaire")
+    st.title("Mental Health Diagnostic Questionnaire 🧠")
 
     query = {
-        "Depression": [
+        "Depression ": [
             "1. Are you currently experiencing a depressive mood?",
             "2. Are you finding activities that you once found enjoyable less pleasurable now?",
             "3. Do you notice any changes in your thinking or memory?",
@@ -27,7 +27,7 @@ def main():
             "12. Are you speaking or moving slower than usual?",
             "13. Have you noticed a decrease in your sex drive?"
         ],
-        "Schizophrenia": [
+        "Schizophrenia ": [
             "14. Have you ever felt like something else was controlling you or influencing your actions?",
             "15. Do you sometimes believe things that others might find hard to believe?",
             "16. Do you ever see or hear things that others can't?",
@@ -46,7 +46,7 @@ def main():
             "27. Do you ever see or hear things that others can't?",
             "28. Do you sometimes find it difficult to express your thoughts clearly?"
         ],
-        "Delusional Disorder": [
+        "Delusional Disorder ": [
             "29. Have you had any beliefs or ideas you think others might find unusual or not based in reality for at least the past three months?",
             "30. Have you experienced any symptoms typically associated with schizophrenia, such as hallucinations or disorganized thinking?",
             "31. Have you had any significant changes in your mood, such as prolonged periods of depression or episodes of extreme happiness and energy?",
@@ -212,9 +212,11 @@ def main():
         for i in range(len(labels)):
             prob_labels[labels[i]] = values[i]
         if len(values) == 0:
-            st.header('NO MHD PRESENT')
+            st.header('NO MHD PRESENT ❌')
         else:
-            st.write(prob_labels)        
+            st.header('MHDs DETECTED ✅')
+            st.write(prob_labels)  
+                  
             st.title("Pie Chart Example")
 
             # Create a pie chart
